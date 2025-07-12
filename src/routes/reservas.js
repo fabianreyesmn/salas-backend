@@ -4,6 +4,7 @@ const reservaController = require('../controllers/reservaController');
 
 router.get('/', reservaController.getAll);
 router.post('/', reservaController.create);
-// agregar liberar, liberarManual más adelante
+
+router.patch('/:id/liberar', reservaController.liberarManual);
 
 module.exports = router;
