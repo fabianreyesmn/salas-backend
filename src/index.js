@@ -4,10 +4,10 @@ const cron = require('node-cron');
 
 const PORT = process.env.PORT || 3000;
 
-// Ejecutar cron job
+// Execute the cron job setup
 setupCron(cron);
 
-// Sincronizar y arrancar el servidor
+// Sinchronize the database and start the server
 sequelize.sync({ alter: true }).then(() => {
   app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);

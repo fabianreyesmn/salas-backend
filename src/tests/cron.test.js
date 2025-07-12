@@ -5,6 +5,7 @@ const liberarReservasVencidas = require('../jobs/liberarReservasVencidas');
 
 let salaId;
 
+// Configure the database before testing
 beforeAll(async () => {
   await Reserva.destroy({ where: {} });
   await Sala.destroy({ where: {} });
@@ -17,7 +18,7 @@ beforeAll(async () => {
 
   salaId = sala.id;
 
-  // Crear una reserva que ya está vencida
+  // Create an active reservation that will expire
   await Reserva.create({
     salaId,
     inicio: '2025-07-10T10:00:00',
@@ -26,13 +27,14 @@ beforeAll(async () => {
   });
 });
 
+// Clean up the database after testing
 afterAll(async () => {
   await sequelize.close();
 });
 
+// Tests for the cron job that releases expired reservations
 describe('Cron job: liberarReservasVencidas', () => {
   it('debe liberar reservas vencidas automáticamente', async () => {
-    // Ejecutar manualmente la función del cron
     await liberarReservasVencidas();
 
     const reservas = await Reserva.findAll({ where: { salaId } });

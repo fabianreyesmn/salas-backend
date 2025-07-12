@@ -6,13 +6,17 @@ afterAll(async () => {
   await sequelize.close();
 });
 
+// Tests for the Salas API
 describe('Salas API', () => {
+
+  // Get all rooms 
   it('GET /api/salas debe devolver un array', async () => {
     const res = await request(app).get('/api/salas');
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
 
+  // Create a new room
   it('POST /api/salas debe crear una nueva sala', async () => {
     const res = await request(app)
       .post('/api/salas')

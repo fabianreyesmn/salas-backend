@@ -1,9 +1,11 @@
 const { Reserva, Sala } = require('../models');
 const { Op } = require('sequelize');
 
+// This function releases expired reservations
 async function liberarReservasVencidas() {
-  const ahora = new Date();
+  const ahora = new Date();// Obtener la fecha y hora actual
 
+  // Search for active reservations that have expired
   const reservas = await Reserva.findAll({
     where: {
       estado: 'activa',
@@ -11,11 +13,12 @@ async function liberarReservasVencidas() {
     }
   });
 
+  // Process each expired reservation
   for (const reserva of reservas) {
     reserva.estado = 'expirada';
     await reserva.save();
 
-    // liberar la sala solo si no tiene otra reserva activa
+    // Release the room if there are no other active reservations
     const reservasActivas = await Reserva.count({
       where: {
         salaId: reserva.salaId,

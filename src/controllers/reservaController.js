@@ -1,11 +1,13 @@
 const ReservaService = require('../services/reservaService');
 const { Reserva, Sala } = require('../models');
 
+// Get all reservations
 exports.getAll = async (req, res) => {
   const reservas = await ReservaService.getAll();
   res.json(reservas);
 };
 
+// Create a new reservation
 exports.create = async (req, res) => {
   try {
     const reserva = await ReservaService.create(req.body);
@@ -15,6 +17,7 @@ exports.create = async (req, res) => {
   }
 };
 
+// Release a reservation manually
 exports.liberarManual = async (req, res) => {
   const id = req.params.id;
 
@@ -24,10 +27,11 @@ exports.liberarManual = async (req, res) => {
       return res.status(404).json({ error: 'Reserva no encontrada o ya finalizada' });
     }
 
+    // Change the state to 'liberada'
     reserva.estado = 'liberada';
     await reserva.save();
 
-    // revisar si es la única activa para liberar sala
+    // Check if the room has no other active reservations
     const activas = await Reserva.count({
       where: {
         salaId: reserva.salaId,

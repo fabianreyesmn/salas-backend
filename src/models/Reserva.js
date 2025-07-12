@@ -1,5 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Reserva = sequelize.define('Reserva', {
+    // Definition of the fields for the Reserva model
     inicio: { type: DataTypes.DATE, allowNull: false },
     fin: { type: DataTypes.DATE, allowNull: false },
     estado: {
@@ -11,5 +12,3 @@ module.exports = (sequelize, DataTypes) => {
 };
 
 // This file defines the Reserva model using Sequelize
-// It includes fields for start time, end time, and status with default values
-// The status can be 'activa', 'liberada', or 'expirada'

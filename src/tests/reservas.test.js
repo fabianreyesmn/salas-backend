@@ -2,21 +2,21 @@ const request = require('supertest');
 const { app } = require('../app');
 const { sequelize, Sala, Reserva } = require('../models');
 
-let salaId; // Variable para almacenar el ID de la sala creada
+let salaId; // Variable to store the real ID of the room
 
 beforeAll(async () => {
-  // Limpiar las tablas antes de crear datos de prueba
+  // Clean up the database before testing
   await Reserva.destroy({ where: {} });
   await Sala.destroy({ where: {} });
   
-  // Crear una sala y obtener su ID real
+  // Create a room for testing
   const sala = await Sala.create({ 
     nombre: 'Sala A', 
     ubicacion: 'Piso 1', 
     capacidad: 10 
   });
   
-  salaId = sala.id; // Guardar el ID real de la sala
+  salaId = sala.id; // Store the ID of the created room
 });
 
 afterAll(async () => {
@@ -28,7 +28,7 @@ describe('Reservas API', () => {
     const res = await request(app)
       .post('/api/reservas')
       .send({
-        salaId: salaId, // Usar el ID real de la sala
+        salaId: salaId, // Use the real ID of the room
         inicio: '2025-07-11T10:00:00',
         fin: '2025-07-11T11:30:00'
       });
@@ -43,7 +43,7 @@ describe('Reservas API', () => {
     const res = await request(app)
       .post('/api/reservas')
       .send({
-        salaId: salaId, // Usar el ID real de la sala
+        salaId: salaId, // Use the real ID of the room
         inicio: '2025-07-11T12:00:00',
         fin: '2025-07-11T15:00:00'
       });
@@ -57,7 +57,7 @@ describe('Reservas API', () => {
     const res = await request(app)
       .post('/api/reservas')
       .send({
-        salaId: salaId, // Usar el ID real de la sala
+        salaId: salaId, // Use the real ID of the room
         inicio: '2025-07-11T10:30:00',
         fin: '2025-07-11T11:45:00'
       });
@@ -68,11 +68,11 @@ describe('Reservas API', () => {
   });
 
   it('PATCH /api/reservas/:id/liberar debe liberar la reserva manualmente', async () => {
-    // Crear una reserva activa nueva
+    // Create a new active reservation
     const crear = await request(app)
       .post('/api/reservas')
       .send({
-        salaId: salaId, // Usar el ID real de la sala
+        salaId: salaId, // Use the real ID of the room
         inicio: '2025-07-11T13:00:00',
         fin: '2025-07-11T14:30:00'
       });
