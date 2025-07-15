@@ -2,6 +2,11 @@ const request = require('supertest');
 const { app } = require('../app');
 const { sequelize } = require('../models');
 
+beforeAll(async () => {
+  // Sync database, this creates the tables
+  await sequelize.sync({ force: true });
+});
+
 afterAll(async () => {
   await sequelize.close();
 });

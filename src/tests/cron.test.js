@@ -7,6 +7,7 @@ let salaId;
 
 // Configure the database before testing
 beforeAll(async () => {
+  await sequelize.sync({ force: true });
   await Reserva.destroy({ where: {} });
   await Sala.destroy({ where: {} });
 
@@ -18,11 +19,18 @@ beforeAll(async () => {
 
   salaId = sala.id;
 
-  // Create an active reservation that will expire
+  // Create an active reservation that should expire
+  // Use a past date to ensure it's expired
+  const pastDate = new Date();
+  pastDate.setHours(pastDate.getHours() - 2); // 2 hours ago
+  
+  const pastEndDate = new Date(pastDate);
+  pastEndDate.setHours(pastEndDate.getHours() + 1); // 1 hour after past start
+  
   await Reserva.create({
     salaId,
-    inicio: '2025-07-10T10:00:00',
-    fin: '2025-07-10T11:00:00',
+    inicio: pastDate.toISOString(),
+    fin: pastEndDate.toISOString(),
     estado: 'activa'
   });
 });
